@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--logback有5种级别，分别是TRACE < DEBUG < INFO < WARN < ERROR，定义于ch.qos.logback.classic.Level类中。-->
+<!--scan : 当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true-->
+<!--scanPeriod : 设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。-->
+<!--debug : 当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。-->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!--设置存储路径变量-->
+    <property name="LOG_HOME" value="./logs"/>
+    <!--项目名称-->
+    <property name="APP_NAME" value="technology-learning"/>
+    <!--日志级别,此处配置级别会被配置文件中覆盖，如果配置文件不配置默认走此处级别-->
+    <property name="log.level" value="info"/>
+    <!-- 日志最大的历史（单位：天 ）不配置视为永久保存-->
+    <property name="log.maxHistory" value="2"/>
+    <!--日志切割最大大小-->
+    <property name="log.maxSize" value="100MB" />
+    <!--格式化输出-->
+    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+    <!--控制台输出appender-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!--设置输出格式-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%-30logger{30}:%-4line) %thread %green(%-18X{LOG_ID}) %msg%n</pattern>
+            <!--设置编码-->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!--以下两个示例，分为时间窗口切割、时间窗口+大小切割两种模式-->
+    <!--一、时间窗口切割，全级别输出-->
+    <!--    <appender name="timeFileOutput" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--        &lt;!&ndash;日志名,指定最新的文件名，其他文件名使用FileNamePattern &ndash;&gt;-->
+    <!--        <File>${LOG_HOME}/log/${APP_NAME}.log</File>-->
+    <!--        &lt;!&ndash;文件滚动模式&ndash;&gt;-->
+    <!--        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+    <!--            &lt;!&ndash;日志文件输出的文件名,可设置文件类型为gz,开启文件压缩&ndash;&gt;-->
+    <!--            <FileNamePattern>${LOG_HOME}/log/${APP_NAME}-%d{yyyy-MM-dd}.%i.log.gz</FileNamePattern>-->
+    <!--            &lt;!&ndash;日志文件保留天数&ndash;&gt;-->
+    <!--            <maxHistory>${log.maxHistory}</maxHistory>-->
+    <!--        </rollingPolicy>-->
+    <!--        &lt;!&ndash;输出格式&ndash;&gt;-->
+    <!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+    <!--            &lt;!&ndash;格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符&ndash;&gt;-->
+    <!--            <pattern>${log.pattern}</pattern>-->
+    <!--            &lt;!&ndash;设置编码&ndash;&gt;-->
+    <!--            <charset>UTF-8</charset>-->
+    <!--        </encoder>-->
+    <!--    </appender>-->
+    <!--一、时间窗口+大小切割，全级别输出-->
+    <!--    <appender name="timeAndSizeFileOutput" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--        &lt;!&ndash;日志名,指定最新的文件名，其他文件名使用FileNamePattern &ndash;&gt;-->
+    <!--        <File>${LOG_HOME}/log/${APP_NAME}.log</File>-->
+    <!--        &lt;!&ndash;文件滚动模式&ndash;&gt;-->
+    <!--        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+    <!--            &lt;!&ndash;日志文件输出的文件名,可设置文件类型为gz,开启文件压缩&ndash;&gt;-->
+    <!--            <FileNamePattern>${LOG_HOME}/log/${APP_NAME}-%d{yyyy-MM-dd}.%i.log.gz</FileNamePattern>-->
+    <!--            &lt;!&ndash;日志文件保留天数&ndash;&gt;-->
+    <!--            <maxHistory>${log.maxHistory}</maxHistory>-->
+    <!--            &lt;!&ndash;默认值10M，当文件大小超过log.maxSize时，通知RollingPolicy轮转&ndash;&gt;-->
+    <!--            <maxFileSize>${log.maxSize}</maxFileSize>-->
+    <!--        </rollingPolicy>-->
+    <!--        &lt;!&ndash;输出格式&ndash;&gt;-->
+    <!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+    <!--            &lt;!&ndash;格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符&ndash;&gt;-->
+    <!--            <pattern>${log.pattern}</pattern>-->
+    <!--            &lt;!&ndash;设置编码&ndash;&gt;-->
+    <!--            <charset>UTF-8</charset>-->
+    <!--        </encoder>-->
+    <!--    </appender>-->
+    <!--info日志-->
+    <appender name="infofile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 指定日志文件的名称 -->
+        <file>${LOG_HOME}/infolog/${APP_NAME}-info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名,可设置文件类型为gz,开启文件压缩-->
+            <fileNamePattern>${LOG_HOME}/infolog/${APP_NAME}-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+            <!--日志文件保留天数-->
+            <maxHistory>${log.maxHistory}</maxHistory>
+            <!--默认值10M，当文件大小超过log.maxSize时，通知RollingPolicy轮转-->
+            <maxFileSize>${log.maxSize}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <!-- 过滤器，过滤掉不是指定日志水平的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 设置日志级别 -->
+            <level>info</level>
+            <!-- 如果跟该日志水平相匹配，则接受 -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 如果跟该日志水平不匹配，则过滤掉 -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!--debug日志-->
+    <appender name="debugfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 指定日志文件的名称 -->
+        <file>${LOG_HOME}/debuglog/${APP_NAME}-debug.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名,可设置文件类型为gz,开启文件压缩-->
+            <fileNamePattern>${LOG_HOME}/debuglog/${APP_NAME}-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+            <!--日志文件保留天数-->
+            <!--            <maxHistory>${log.maxHistory}</maxHistory>-->
+            <!--默认值10M，当文件大小超过log.maxSize时，通知RollingPolicy轮转-->
+            <maxFileSize>${log.maxSize}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <!-- 过滤器，过滤掉不是指定日志水平的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 设置日志级别 -->
+            <level>debug</level>
+            <!-- 如果跟该日志水平相匹配，则接受 -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 如果跟该日志水平不匹配，则过滤掉 -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!--error日志-->
+    <appender name="errorfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 指定日志文件的名称 -->
+        <file>${LOG_HOME}/errorlog/${APP_NAME}-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名,可设置文件类型为gz,开启文件压缩-->
+            <fileNamePattern>${LOG_HOME}/errorlog/${APP_NAME}-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+            <!--日志文件保留天数-->
+            <!--            <maxHistory>${log.maxHistory}</maxHistory>-->
+            <!--默认值10M，当文件大小超过log.maxSize时，通知RollingPolicy轮转-->
+            <maxFileSize>${log.maxSize}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <!-- 过滤器，过滤掉不是指定日志水平的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 设置日志级别 -->
+            <level>error</level>
+            <!-- 如果跟该日志水平相匹配，则接受 -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 如果跟该日志水平不匹配，则过滤掉 -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!--指定基础的日志输出级别-->
+    <root level="${log.level}">
+        <!--appender将会添加到这个loger-->
+        <appender-ref ref="console"/>
+        <appender-ref ref="errorfile"/>
+        <appender-ref ref="infofile"/>
+        <appender-ref ref="debugfile"/>
+    </root>
+</configuration>
